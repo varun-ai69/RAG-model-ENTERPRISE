@@ -43,7 +43,7 @@ exports.askQuestion = async (req, res) => {
 
         // 4. Ask LLM - final call to LLM model to answer the query given with the context we retrieve
         const answer = await askLLM(context, question);
-
+         
         res.json({
             question,
             answer,

@@ -23,7 +23,6 @@ const { chunkText } = require("../services/chunkGenerator")
 const { generateEmbeddings } = require("../services/embeddingService");
 const { initVectorDB, insertVectors } = require("../services/vectorDB");
 
-
 const fs = require("fs");
 
 exports.ingestDocument = async (req, res) => {
@@ -45,12 +44,13 @@ exports.ingestDocument = async (req, res) => {
     // Step 2: chunks the rawText 
    const chunks = chunkText(rawText, {source: req.file.originalname});
 
-   // Step 3: now each chunk converted to embededChunks
+   // Step 3: now each chunk converted to embededChunks (numericals)
    const embeddedChunks = await generateEmbeddings(chunks);
    
    // Step 4: each embededChunks is stored in vectorDatabase (currently using qdrant for vectorDB)
    await initVectorDB();          // run once (safe to call multiple times)
    await insertVectors(embeddedChunks);
+
 
     
   return res.status(200).json({
