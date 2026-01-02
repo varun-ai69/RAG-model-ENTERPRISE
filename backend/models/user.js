@@ -12,14 +12,15 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
-      lowercase: true
+      lowercase: true,
+      trim: true,
+      unique: true
     },
 
     password: {
       type: String,
       required: true,
-      select: false // password by default hide
+      select: false // never return password by default
     },
 
     role: {
@@ -28,28 +29,31 @@ const userSchema = new mongoose.Schema(
       default: "EMPLOYEE"
     },
 
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true
+    },
+
     isActive: {
       type: Boolean,
       default: true
     },
 
-    lastLogin: {
+    lastLoginAt: {
       type: Date
     }
   },
   { timestamps: true }
 );
 
-
-
-
+// 🔐 Hash password before save
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return ;
+  if (!this.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  
 });
-
-
 
 module.exports = mongoose.model("User", userSchema);
