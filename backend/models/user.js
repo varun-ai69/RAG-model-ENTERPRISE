@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
-      required: true
+      // required: true
     },
 
     isActive: {
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
 
 
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return ;
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

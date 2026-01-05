@@ -5,6 +5,7 @@ const Invite = require("../models/Invite");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
 const crypto = require("crypto");
+const { error } = require("console");
 
 //this function for registering the company and admin in database
 exports.registerCompany = async (req, res) => {
@@ -14,6 +15,8 @@ exports.registerCompany = async (req, res) => {
     if (!data.companyName || !data.name || !data.email || !data.password) {
       return res.status(400).json({ error: "All fields are required" });
     }
+    
+    
 
     const existingUser = await User.findOne({ email: data.email });
     if (existingUser) {
@@ -67,6 +70,7 @@ exports.registerCompany = async (req, res) => {
       }
     });
   } catch (err) {
+    throw(err)
     res.status(500).json({ error: "Server error" });
   }
 };
