@@ -32,11 +32,14 @@ exports.askQuestion = async (req, res) => {
         if (!question) {
             return res.status(400).json({ error: "Question is required" });
         }
+        const companyId = req.user.companyId //company Id to search the document according to company Id only 
+
+
         // 1. Embed question - embeded the the question into embededQuery (numerical)
         const queryEmbedding = await embedQuery(question);
 
         // 2. Retrieve relevant chunks - search the embededQuery into vectorDB and return most relevant chunks
-        const results = await searchVectors(queryEmbedding, 5);
+        const results = await searchVectors(queryEmbedding,companyId, 5);
 
         // 3. Build context - Building context that generated from searchingChunks
         const context = results.map(r => r.payload.text).join("\n");

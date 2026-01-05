@@ -43,6 +43,7 @@ async function generateEmbeddings(chunks) {
   return results;
 }
 
+//for embedding query 
 async function embedQuery(text) {
   const model = await loadModel();
 

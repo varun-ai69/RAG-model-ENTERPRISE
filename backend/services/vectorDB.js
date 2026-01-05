@@ -22,18 +22,19 @@ async function initVectorDB() {
       }
     });
 
-    console.log("✅ Vector collection created:", COLLECTION_NAME);
+    console.log(" Vector collection created:", COLLECTION_NAME);
   } else {
-    console.log("ℹ️ Vector collection already exists");
+    console.log(" Vector collection already exists");
   }
 }
 
 // Insert embeddings into vector DB
-async function insertVectors(chunks) {
+async function insertVectors(chunks,companyId) {
   const points = chunks.map((chunk) => ({
     id: uuidv4(),
     vector: chunk.embedding,
     payload: {
+      companyId: companyId,
       document_id: chunk.document_id,
       source: chunk.source,
       chunk_index: chunk.chunk_index,
@@ -50,10 +51,18 @@ async function insertVectors(chunks) {
   console.log(`✅ Inserted ${points.length} vectors into Qdrant`);
 }
 
-async function searchVectors(queryEmbedding, topK = 5) {
+async function searchVectors(queryEmbedding, companyId ,topK = 5) {
   const result = await client.search(COLLECTION_NAME, {
     vector: queryEmbedding,
     limit: topK,
+    filter: {
+      must: [
+        {
+          key: "companyId",
+          match: { value: companyId }
+        }
+      ]
+    },
     with_payload: true
   });
 
