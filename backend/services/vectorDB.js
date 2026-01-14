@@ -69,8 +69,22 @@ async function searchVectors(queryEmbedding, companyId ,topK = 5) {
   return result;
 }
 
+async function deleteVectorsByDocument(documentId) {
+  await client.delete(COLLECTION_NAME, {
+    filter: {
+      must: [
+        {
+          key: "document_id",
+          match: { value: documentId }
+        }
+      ]
+    }
+  });
+}
+
 module.exports = {
   initVectorDB,
   insertVectors,
-  searchVectors
+  searchVectors,
+  deleteVectorsByDocument
 };

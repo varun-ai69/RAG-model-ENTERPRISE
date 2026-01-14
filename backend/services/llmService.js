@@ -26,7 +26,29 @@ ANSWER:
 `;
 
   const result = await model.generateContent(prompt);
-  return result.response.text(); 
+  return result.response.text();
 }
 
-module.exports = { askLLM };
+/**
+ * 🔹 Chat Title Generator (ONLY for first message)
+ */
+async function generateChatTitle(question) {
+  const prompt = `
+Generate a short professional chat title (4 to 6 words).
+Do not use quotes.
+Do not add punctuation.
+
+User question:
+${question}
+
+Title:
+`;
+
+  const result = await model.generateContent(prompt);
+  return result.response.text().trim();
+}
+
+module.exports = {
+  askLLM,
+  generateChatTitle
+};
