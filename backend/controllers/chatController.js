@@ -158,3 +158,66 @@ exports.askQuestion = async (req, res) => {
     res.status(500).json({ error: "Failed to generate answer" });
   }
 };
+
+
+// Delete a chat (soft delete)
+exports.deleteChat = async (req, res) => {
+  try {
+    const chat = await ChatSession.findOne({
+      _id: req.params.sessionId,
+      companyId: req.user.companyId,
+      userId: req.user.userId
+    });
+
+    if (!chat) return res.status(404).json({ error: "Chat not found" });
+
+    await ChatMessage.deleteMany({ sessionId: chat._id });
+
+    await chat.deleteOne();
+
+    res.json({ message: "Chat deleted" });
+  } catch (err) {
+    console.error("DELETE CHAT ERROR:", err);
+    res.status(500).json({ error: "Failed to delete chat" });
+  }
+};
+
+
+// Rename chat
+exports.renameChat = async (req, res) => {
+  try {
+    const { title } = req.body;
+
+    const chat = await ChatSession.findOne({
+      _id: req.params.sessionId,
+      companyId: req.user.companyId,
+      userId: req.user.userId
+    });
+
+    if (!chat) return res.status(404).json({ error: "Chat not found" });
+
+    chat.title = title;
+    await chat.save();
+
+    res.json({ message: "Chat renamed", title });
+  } catch (err) {
+    console.error("RENAME CHAT ERROR:", err);
+    res.status(500).json({ error: "Failed to rename chat" });
+  }
+};
+
+
+// Export chat (for compliance)
+exports.exportChat = async (req, res) => {
+  try {
+    const messages = await ChatMessage.find({
+      sessionId: req.params.sessionId,
+      companyId: req.user.companyId
+    }).sort({ createdAt: 1 });
+
+    res.json(messages);
+  } catch (err) {
+    console.error("EXPORT CHAT ERROR:", err);
+    res.status(500).json({ error: "Failed to export chat" });
+  }
+};

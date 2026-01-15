@@ -5,6 +5,7 @@ const auth = require("../middlewares/authMiddleware");
 const role = require("../middlewares/roleMiddleware");
 
 const UnansweredQuery = require("../models/unansweredQuery");
+const { chatUsage, documentUsage } = require("../controllers/analyticsController");
 
 // List unanswered questions for company
 router.get(
@@ -20,4 +21,11 @@ router.get(
   }
 );
 
+// Chat usage analytics
+router.get("/analytics/chat-usage", auth, role(["ADMIN"]), chatUsage);
+
+// Document usage analytics
+router.get("/analytics/document-usage", auth, role(["ADMIN"]), documentUsage);
+
 module.exports = router;
+
