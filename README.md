@@ -78,7 +78,7 @@ This system converts private documents into searchable vector embeddings and use
 
 ---
 
-## 🔄 RAG FLOW EXPLAINED
+## RAG FLOW EXPLAINED
 
 ### 1️⃣ Ingestion Pipeline
 
