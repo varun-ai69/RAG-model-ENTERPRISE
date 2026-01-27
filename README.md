@@ -118,7 +118,7 @@ User: "What is the company leave policy?"
 
 ---
 
-## 🔧 Installation & Setup
+## Installation & Setup
 
 ### 1️⃣ Clone Repository
 
