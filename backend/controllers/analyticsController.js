@@ -10,8 +10,7 @@ exports.chatUsage = async (req, res) => {
             { $group: { _id: "$userId", total: { $sum: 1 } } },
             { $sort: { total: -1 } }
         ]);
-
-        res.json(data);
+        res.status(200).json(data);
     } catch (err) {
         console.error("CHAT USAGE ERROR:", err);
         res.status(500).json({ error: "Failed to fetch chat usage" });
