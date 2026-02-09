@@ -21,10 +21,10 @@ router.get(
   }
 );
 
-// Chat usage analytics
+// Chat usage analytics routes
 router.get("/analytics/chat-usage", auth, role(["ADMIN"]), chatUsage);
 
-// Document usage analytics
+// Document usage analytics routes
 router.get("/analytics/document-usage", auth, role(["ADMIN"]), documentUsage);
 
 module.exports = router;
